@@ -62,6 +62,7 @@ import {
 	VectorKeyframeTrack,
 	sRGBEncoding
 } from '../../../build/three.module.js';
+import * as wasm from '../../../../src/webassembly/coas_wasm_bg.wasm';
 
 class GLTFLoader extends Loader {
 
@@ -162,10 +163,10 @@ class GLTFLoader extends Loader {
 		loader.setRequestHeader( this.requestHeader );
 		loader.setWithCredentials( this.withCredentials );
 
-		loader.load( url, function ( data ) {
+		loader.load( url, function ( encryptedData ) {
 
 			try {
-
+                const data = wasm.decrypt_gltf_data(encryptedData);
 				scope.parse( data, resourcePath, function ( gltf ) {
 
 					onLoad( gltf );
