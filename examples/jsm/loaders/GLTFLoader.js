@@ -62,7 +62,7 @@ import {
 	VectorKeyframeTrack,
 	sRGBEncoding
 } from '../../../build/three.module.js';
-import webGIRequest from '../../../../src/js/request/webGlRequest';
+import webGlRequest from '../../../../src/js/request/webGlRequest';
 import * as wasm from '../../../../src/webassembly/coas_wasm_bg.wasm';
 
 class GLTFLoader extends Loader {
