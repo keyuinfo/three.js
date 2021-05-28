@@ -168,7 +168,7 @@ class GLTFLoader extends Loader {
 			try {
         console.log(encryptedData);
         // 进入 rust web assembly 传入 data 解码后 传出 data
-        data =  wasm.decrypt_gltf_data(encryptedData);
+        const data =  wasm.decrypt_gltf_data(encryptedData);
 
 				scope.parse( data, resourcePath, function ( gltf ) {
 
