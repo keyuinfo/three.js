@@ -62,6 +62,7 @@ import {
 	VectorKeyframeTrack,
 	sRGBEncoding
 } from '../../../build/three.module.js';
+import CryptoJS from 'crypto-js';
 import webGlRequest from '../../../../src/js/request/webGlRequest';
 import * as wasm from '../../../../src/webassembly/coas_wasm_bg.wasm';
 
@@ -172,8 +173,6 @@ class GLTFLoader extends Loader {
           key = result["key"];
           // 获取到key
           const data = decryptGltfData(encryptedData, key);
-          // encryptedData key
-          // data
           // 进入 rust web assembly 传入 data 解码后 传出 data *snake
           wasm.decrypt_gltf_data(encryptedData);
 
@@ -374,7 +373,10 @@ class GLTFLoader extends Loader {
 }
 
 function decryptGltfData(encryptedData, key){
-    return null; 
+    var data = CryptoJS.AES.decrypt(encryptedData,CryptoJS.enc.Utf8.parse(key),{
+      mode:CryptoJS.mode.CFB,
+    })
+    return data; 
 }
 
 /* GLTFREGISTRY */
