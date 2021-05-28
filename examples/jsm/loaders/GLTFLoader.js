@@ -62,6 +62,7 @@ import {
 	VectorKeyframeTrack,
 	sRGBEncoding
 } from '../../../build/three.module.js';
+import webGIRequest from '../../../../src/js/request/webGlRequest';
 import * as wasm from '../../../../src/webassembly/coas_wasm_bg.wasm';
 
 class GLTFLoader extends Loader {
@@ -166,18 +167,24 @@ class GLTFLoader extends Loader {
 		loader.load( url, function ( encryptedData ) {
 
 			try {
-        console.log(encryptedData);
-        // 进入 rust web assembly 传入 data 解码后 传出 data
-        const data =  wasm.decrypt_gltf_data(encryptedData);
+        let key;
+        webGlRequest.fetchEncryptedKey().then(result => {
+          key = result["key"];
+          // 获取到key
+          const data = decryptGltfData(encryptedData, key);
+          // encryptedData key
+          // data
+          // 进入 rust web assembly 传入 data 解码后 传出 data *snake
+          wasm.decrypt_gltf_data(encryptedData);
 
-				scope.parse( data, resourcePath, function ( gltf ) {
+				  scope.parse( data, resourcePath, function ( gltf ) {
 
-					onLoad( gltf );
+					  onLoad( gltf );
 
-					scope.manager.itemEnd( url );
+					  scope.manager.itemEnd( url );
 
-				}, _onError );
-
+				  }, _onError );
+        });
 			} catch ( e ) {
 
 				_onError( e );
@@ -364,6 +371,10 @@ class GLTFLoader extends Loader {
 
 	}
 
+}
+
+function decryptGltfData(encryptedData, key){
+    return null; 
 }
 
 /* GLTFREGISTRY */
