@@ -62,7 +62,6 @@ import {
 	VectorKeyframeTrack,
 	sRGBEncoding
 } from '../../../build/three.module.js';
-import CryptoJS from 'crypto-js';
 import webGlRequest from '../../../../src/js/request/webGlRequest';
 import * as wasm from '../../../../src/webassembly/coas_wasm_bg.wasm';
 
@@ -165,18 +164,18 @@ class GLTFLoader extends Loader {
 		loader.setRequestHeader( this.requestHeader );
 		loader.setWithCredentials( this.withCredentials );
 
-		loader.load( url, function ( encryptedData ) {
+		loader.load(url, function ( encryptedData ) {
 
 			try {
         let key;
         webGlRequest.fetchEncryptedKey().then(result => {
           key = result["key"];
           // 获取到key
-          const data = decryptGltfData(encryptedData, key);
+          const data = decryptGltfData();
           // 进入 rust web assembly 传入 data 解码后 传出 data *snake
           wasm.decrypt_gltf_data(encryptedData);
 
-				  scope.parse( data, resourcePath, function ( gltf ) {
+				  scope.parse( encryptedData, resourcePath, function ( gltf ) {
 
 					  onLoad( gltf );
 
@@ -372,11 +371,8 @@ class GLTFLoader extends Loader {
 
 }
 
-function decryptGltfData(encryptedData, key){
-    var data = CryptoJS.AES.decrypt(encryptedData,CryptoJS.enc.Utf8.parse(key),{
-      mode:CryptoJS.mode.CFB,
-    })
-    return data; 
+function decryptGltfData(){
+    return;
 }
 
 /* GLTFREGISTRY */
