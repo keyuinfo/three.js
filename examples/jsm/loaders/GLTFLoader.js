@@ -372,6 +372,7 @@ class GLTFLoader extends Loader {
 }
 
 function decryptGltfData(){
+    // 解密数据
     return;
 }
 
