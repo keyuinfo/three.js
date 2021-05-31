@@ -171,7 +171,7 @@ class GLTFLoader extends Loader {
         webGlRequest.fetchEncryptedKey().then(result => {
           key = result["key"];
           // 获取到key
-          const data = decryptGltfData();
+          const data = decryptGltfData(encryptedData, key);
           // 进入 rust web assembly 传入 data 解码后 传出 data *snake
           wasm.decrypt_gltf_data(encryptedData);
 
@@ -371,9 +371,11 @@ class GLTFLoader extends Loader {
 
 }
 
-function decryptGltfData(){
-    // 解密数据
-    return;
+function decryptGltfData(encryptedData, key){
+  // var data = CryptoJS.AES.decrypt(encryptedData,CryptoJS.enc.Utf8.parse(key),{
+  //  mode:CryptoJS.mode.CFB,
+  // })
+  // return data; 
 }
 
 /* GLTFREGISTRY */
